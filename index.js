@@ -1,10 +1,10 @@
-const fs = require('fs');
-const puppeteer = require('puppeteer');
+const fs = require("fs");
+const puppeteer = require("puppeteer");
 
 async function run() {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto('https://www.traversymedia.com');
+  await page.goto("https://www.traversymedia.com");
 
   //  Get a screenshot of the page
   // await page.screenshot({ path: 'example.png', fullPage: true });
@@ -27,31 +27,31 @@ async function run() {
   // );
 
   //  Get courses
-  // const courses = await page.evaluate(() =>
-  //   Array.from(document.querySelectorAll('#courses .card'), (e) => ({
-  //     title: e.querySelector('.card-body h3').innerText,
-  //     level: e.querySelector('.card-body .level').innerText,
-  //     url: e.querySelector('.card-footer a').href,
-  //     promo: e.querySelector('.card-footer .promo-code .promo').innerText,
-  //   }))
-  // );
-
-  // Get courses using $$eval
-  const courses = await page.$$eval('#courses .card', (elements) =>
-    elements.map((e) => ({
-      title: e.querySelector('.card-body h3').innerText,
-      level: e.querySelector('.card-body .level').innerText,
-      url: e.querySelector('.card-footer a').href,
-      promo: e.querySelector('.card-footer .promo-code .promo').innerText,
+  const courses = await page.evaluate(() =>
+    Array.from(document.querySelectorAll("#cscourses .card"), (e) => ({
+      title: e.querySelector(".card-body h3").innerText,
+      level: e.querySelector(".card-body .level").innerText,
+      url: e.querySelector(".card-footer a").href,
+      // promo: e.querySelector('.card-footer .promo-code .promo').innerText,
     }))
   );
+
+  // Get courses using $$eval
+  // const courses = await page.$$eval("#cscourses .card", (elements) =>
+  //   elements.map((e) => ({
+  //     title: e.querySelector(".card-body h3").innerText,
+  //     level: e.querySelector(".card-body .level").innerText,
+  //     url: e.querySelector(".card-footer a").href,
+  //     // promo: e.querySelector(".card-footer .promo-code .promo").innerText,
+  //   }))
+  // );
 
   console.log(courses);
 
   // Save data to JSON file
-  fs.writeFile('courses.json', JSON.stringify(courses), (err) => {
+  fs.writeFile("courses.json", JSON.stringify(courses, null, 4), (err) => {
     if (err) throw err;
-    console.log('File saved');
+    console.log("File saved");
   });
 
   await browser.close();
